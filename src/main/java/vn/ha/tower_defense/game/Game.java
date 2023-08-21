@@ -4,16 +4,25 @@ import vn.ha.tower_defense.exceptions.MapLoadException;
 import vn.ha.tower_defense.exceptions.SpriteLoadException;
 import javax.swing.JFrame;
 import vn.ha.tower_defense.inputs.KeyBoardListener;
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
+import vn.ha.tower_defense.observers.Subject;
 
-public class Game  extends JFrame  implements Runnable  {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class Game  extends JFrame  implements Runnable, Subject {
 
     public static GameState currState = GameState.MENU;
+
+    private List<Observer> observers = new ArrayList<>();
 
     private final int FPS = 120;
     private final int UPS = 60;
 
     public Game() {
-        GameScreen gameScreen = new GameScreen();
+        GameScreen gameScreen = new GameScreen(this);
         add(gameScreen);
 
         pack();
@@ -40,6 +49,7 @@ public class Game  extends JFrame  implements Runnable  {
         long lastUpdate = System.nanoTime();
         long lastRender = System.nanoTime();
         long lastCheck = System.currentTimeMillis();
+        Event updateEvent = new Event("Update", Event.EventType.UPDATE);
 
         while (true) {
             long currentTime = System.nanoTime();
@@ -50,6 +60,7 @@ public class Game  extends JFrame  implements Runnable  {
             }
 
             if (currentTime - lastUpdate >= TIME_PER_UPDATE) {
+                notifyAllObserver(updateEvent);
                 lastUpdate = currentTime;
                 updateCounter++;
             }
@@ -63,7 +74,23 @@ public class Game  extends JFrame  implements Runnable  {
         }
     }
 
-    public void update() {
-        // System.out.println("Update ");
+    @Override
+    public void attach(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void attachAll(List<? extends Observer> observers) {
+        this.observers.addAll(observers);
+    }
+
+    @Override
+    public void detach(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyAllObserver(Event event) {
+        this.observers.forEach(observer -> observer.update(event));
     }
 }

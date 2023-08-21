@@ -30,9 +30,10 @@ public class GameScreen extends JPanel {
     private TileManager tileManager;
     private Map<GameState, Scene> gameScenes = new HashMap<>();
 
-    public GameScreen() {
+    public GameScreen(Game game) {
         this.tileManager = new TileManager();
         this.tileManager.loadAtlat(importImg());
+        game.attachAll(this.tileManager.getTiles());
 
         loadScences();
 

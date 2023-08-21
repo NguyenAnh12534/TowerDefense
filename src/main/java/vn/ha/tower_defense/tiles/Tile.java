@@ -1,11 +1,14 @@
 package vn.ha.tower_defense.tiles;
 
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
+
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Tile implements Serializable{
+public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
     
@@ -60,4 +63,18 @@ public class Tile implements Serializable{
         return this.layers;
     }
 
+    @Override
+    public void update(Event event) {
+        switch (event.getEventType()) {
+            case UPDATE -> {
+                System.out.println("Update status");
+            }
+            case OTHER -> {
+                System.out.println("Other event");
+            }
+            default -> {
+                System.out.println("No event");
+            }
+        }
+    }
 }

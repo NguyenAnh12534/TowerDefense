@@ -16,6 +16,7 @@ public class TileManager {
     private BufferedImage atlas;
 
     private List<Tile> tileList = new ArrayList();
+    private List<BufferedImage> sprites= new ArrayList<>();
 
     private Map<String, Tile> tileMap = new HashMap<>();
 
@@ -31,6 +32,7 @@ public class TileManager {
             for(int j=0; j< 4; j++) {
                 double angle = j * 90;
                 BufferedImage sprite = SpriteModifier.rotate(atlas.getSubimage(i * 32, 0, 32, 32), angle);
+                sprites.add(sprite);
                 Tile tile = new Tile(sprite, "", tileList.size() + 1);
                 tileList.add(tile);
             }
