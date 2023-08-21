@@ -19,7 +19,7 @@ public class Game  extends JFrame  implements Runnable, Subject {
     private List<Observer> observers = new ArrayList<>();
 
     private final int FPS = 120;
-    private final int UPS = 60;
+    private final int UPS = 10;
 
     public Game() {
         GameScreen gameScreen = new GameScreen(this);

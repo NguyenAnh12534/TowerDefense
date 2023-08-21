@@ -15,12 +15,14 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.inputs.GameMouseListener;
 import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.scenes.MenuScene;
 import vn.ha.tower_defense.scenes.PlayScene;
 import vn.ha.tower_defense.scenes.EditScene;
 import vn.ha.tower_defense.scenes.Scene;
+import vn.ha.tower_defense.tiles.Tile;
 
 public class GameScreen extends JPanel {
     private int width = 960;
@@ -29,8 +31,10 @@ public class GameScreen extends JPanel {
     private Scene gameScene;
     private TileManager tileManager;
     private Map<GameState, Scene> gameScenes = new HashMap<>();
-
+    private Game game;
+    private Tile testTile;
     public GameScreen(Game game) {
+        this.game = game;
         this.tileManager = new TileManager();
         this.tileManager.loadAtlat(importImg());
         game.attachAll(this.tileManager.getTiles());
@@ -44,6 +48,12 @@ public class GameScreen extends JPanel {
         setupKeyBindings();
         requestFocus();
 
+        //Testing
+        Tile baseTileForTestingAnimation = new Tile("", 4);
+        int[] ids = {4, 8, 12, 16};
+        baseTileForTestingAnimation.setIds(ids);
+        this.testTile = baseTileForTestingAnimation;
+        game.attach(baseTileForTestingAnimation);
     }
 
     private void loadScences() {
@@ -71,6 +81,11 @@ public class GameScreen extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        //Testing
+        BufferedImage newSprite = SpriteModifier.buildSprite(this.getTileManager(), testTile);
+        g.drawImage(newSprite, 0, 850,
+                null);
+        //End Testing
         renderGameScene(g);
     }
 
@@ -121,6 +136,10 @@ public class GameScreen extends JPanel {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public Game getGame() {
+        return this.game;
     }
 
 }

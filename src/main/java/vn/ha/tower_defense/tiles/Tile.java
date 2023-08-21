@@ -12,19 +12,13 @@ public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
     
-    private transient BufferedImage sprite;
-
     private Queue<Tile> layers = new LinkedList<>();
-
+    private int[] ids = new int[4];
+    private  int currentIndex = 0;
     private String name;
     private Integer ID;
 
-    public Tile(BufferedImage sprite) {
-        this.sprite = sprite;
-    }
-
-    public Tile(BufferedImage sprite, String name, int ID) {
-        this.sprite = sprite;
+    public Tile(String name, int ID) {
         this.ID = ID;
         this.name = name;
     }
@@ -32,16 +26,8 @@ public class Tile implements Serializable, Observer {
     public Tile(Tile tile) {
         this.name = tile.name;
         this.ID = tile.ID;
-        this.sprite = tile.getSprite();
     }
 
-    public BufferedImage getSprite() {
-        return this.sprite;
-    }
-
-    public void setSprite(BufferedImage sprite) {
-        this.sprite = sprite;
-    }
 
     public String getName() {
         return this.name;
@@ -55,9 +41,6 @@ public class Tile implements Serializable, Observer {
         this.layers.add(tile);
     }
 
-    public Tile deQueue() {
-        return this.layers.poll();
-    }
 
     public Queue<Tile> getLayers() {
         return this.layers;
@@ -67,7 +50,14 @@ public class Tile implements Serializable, Observer {
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                System.out.println("Update status");
+                if(ids[0] == 0)
+                    return;
+                this.ID = ids[currentIndex];
+                currentIndex++;
+                if(currentIndex == ids.length)
+                    currentIndex = 0;
+                System.out.println("Update status "  + this.ID);
+
             }
             case OTHER -> {
                 System.out.println("Other event");
@@ -76,5 +66,9 @@ public class Tile implements Serializable, Observer {
                 System.out.println("No event");
             }
         }
+    }
+
+    public void setIds(int[] ids) {
+        this.ids = ids;
     }
 }

@@ -11,14 +11,13 @@ import vn.ha.tower_defense.tiles.Tile;
 
 public class TileManager {
 
-    Tile GRASS, HORIZONTAL_ROAD, VERTICAL_ROAD, BL_CORNER_ROAD, TR_CORNER_ROAD, WATER, CHARACTER;
-
-    private BufferedImage atlas;
+    public BufferedImage atlas;
 
     private List<Tile> tileList = new ArrayList();
+
+    private static List<BufferedImage> badSprites = new ArrayList<>();
     private List<BufferedImage> sprites= new ArrayList<>();
 
-    private Map<String, Tile> tileMap = new HashMap<>();
 
     public void loadAtlat(BufferedImage atlas) {
         this.atlas = atlas;
@@ -26,41 +25,43 @@ public class TileManager {
     }
 
     private void addTiles() {
-
-        int id = 0;
         for(int i = 0; i<10; i++) {
             for(int j=0; j< 4; j++) {
                 double angle = j * 90;
                 BufferedImage sprite = SpriteModifier.rotate(atlas.getSubimage(i * 32, 0, 32, 32), angle);
                 sprites.add(sprite);
-                Tile tile = new Tile(sprite, "", tileList.size() + 1);
+                badSprites.add(sprite);
+                Tile tile = new Tile("", tileList.size() + 1);
                 tileList.add(tile);
             }
-
-        }  
+        }
+        int[] ids = {getTile(1).getId(), 5,9,13};
+        int[] ids1 = {2,6,10,14};
+        int[] ids2 = {3,7,11,15};
+        int[] ids3 = {4,8,12,16};
+        getTile(1).setIds(ids);
+        getTile(2).setIds(ids1);
+        getTile(3).setIds(ids2);
+        getTile(4).setIds(ids3);
     }
 
     public void addTile(Tile tile) {
-    }
-
-    private Tile tileAt(int x, int y) {
-        return new Tile(atlas.getSubimage(x * 32, y * 32, 32, 32));
-    }
-
-    private Tile tileAt(int x, int y, double angle) {
-        return new Tile(SpriteModifier.rotate(atlas.getSubimage(x * 32, y * 32, 32, 32), angle));
     }
 
     public Tile getTile(int index) {
         return this.tileList.get(index - 1);
     }
 
-    public Tile getTile(int x, int y) {
-        return new Tile(atlas.getSubimage(x * 32, y * 32, 32, 32));
-    }
-
     public List<Tile> getTiles() {
         return this.tileList;
+    }
+
+    public BufferedImage getSprite(Tile tile) {
+        return this.sprites.get(tile.getId()-1);
+    }
+
+    public static BufferedImage getSpriteBadWay(Tile tile) {
+        return badSprites.get(tile.getId()-1);
     }
 
 }

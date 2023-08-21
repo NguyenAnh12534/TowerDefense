@@ -13,9 +13,9 @@ import vn.ha.tower_defense.tiles.Tile;
 public interface SpriteModifier {
 
     public static BufferedImage buildSprite(TileManager tileManager, Tile tile) {
-        BufferedImage baseSprite = tileManager.getTile(tile.getId()).getSprite();
+        BufferedImage baseSprite = tileManager.getSprite(tile);
 
-        if (tile.getLayers().size() == 0)
+        if (tile.getLayers().isEmpty())
             return baseSprite;
 
         int width = baseSprite.getWidth();
@@ -26,7 +26,7 @@ public interface SpriteModifier {
         Graphics2D drawer = newSprite.createGraphics();
         drawer.drawImage(baseSprite, 0, 0, null);
         for (Tile layerTile : tile.getLayers()) {
-            BufferedImage layerSprite = tileManager.getTile(layerTile.getId()).getSprite();
+            BufferedImage layerSprite = tileManager.getSprite(layerTile);
             drawer.drawImage(layerSprite, 0, 0, null);
         }
 

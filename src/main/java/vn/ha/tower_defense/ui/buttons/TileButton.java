@@ -28,7 +28,7 @@ public class TileButton extends GameButton {
     }
 
     private void drawTile(Graphics g) {
-        g.drawImage(tile.getSprite(), super.getX(), super.getY(), null);
+        g.drawImage(TileManager.getSpriteBadWay(tile), super.getX(), super.getY(), null);
     }
 
     public Tile getTile() {

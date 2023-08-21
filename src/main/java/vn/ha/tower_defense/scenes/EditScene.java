@@ -68,7 +68,7 @@ public class EditScene extends Scene {
 
         this.bottomBar.draw(g);
         if (selectedTile != null)
-            g.drawImage(selectedTile.getSprite(), mousePosition.getX(), mousePosition.getY(), null);
+            g.drawImage(this.gameScreen.getTileManager().getSprite(selectedTile), mousePosition.getX(), mousePosition.getY(), null);
 
         g.dispose();
     }

@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import vn.ha.tower_defense.game.Game;
 import vn.ha.tower_defense.map.MapSize;
 import vn.ha.tower_defense.tiles.Tile;
 

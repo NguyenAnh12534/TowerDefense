@@ -50,8 +50,9 @@ public class ActionBar extends Bar {
     public void draw(Graphics g) {
         super.drawBackground(g);
         super.drawTilesButton(g);
-        if (this.gameScreen.getCurrentScene().getSelectedTile() != null) {
-            g.drawImage(this.gameScreen.getCurrentScene().getSelectedTile().getSprite(), selectedTilePosition.getX(),
+        Tile selectTile = this.gameScreen.getCurrentScene().getSelectedTile();
+        if (selectTile != null) {
+            g.drawImage(this.gameScreen.getTileManager().getSprite(selectTile), selectedTilePosition.getX(),
                     selectedTilePosition.getY(), null);
         }
     }

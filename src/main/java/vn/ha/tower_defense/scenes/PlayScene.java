@@ -59,13 +59,13 @@ public class PlayScene extends Scene {
     public void render(Graphics g) {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
-                g.drawImage(this.gameScreen.getTileManager().getTile(map[y][x].getId()).getSprite(), x * 32, y * 32, null);
+                g.drawImage(this.gameScreen.getTileManager().getSprite(map[y][x]), x * 32, y * 32, null);
             }
         }
         
         this.bottomBar.draw(g);
         if (selectedTile != null)
-            g.drawImage(selectedTile.getSprite(), mousePosition.getX(), mousePosition.getY(), null);
+            g.drawImage(this.gameScreen.getTileManager().getSprite(selectedTile), mousePosition.getX(), mousePosition.getY(), null);
     }
 
 

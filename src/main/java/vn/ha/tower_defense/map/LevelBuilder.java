@@ -30,7 +30,7 @@ public class LevelBuilder {
         
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
-                map[y][x] = new Tile(null, null, 1);
+                map[y][x] = new Tile( null, 1);
             }
         }
     }
