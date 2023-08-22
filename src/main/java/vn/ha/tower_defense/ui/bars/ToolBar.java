@@ -80,73 +80,10 @@ public class ToolBar extends Bar {
         this.y = gameScreen.getHeight() - this.height;
     }
 
-    private void drawTestButton(Graphics g) {
-         Tile baseTile = new Tile( null, 1);
-         Tile secondLayerTile = new Tile(null, 21);
-         Tile thirdLayerTile = new Tile(null, 22);
-         Tile fourthLayerTile = new Tile(null, 23);
-
-         Tile baseTileForTestingAnimation = new Tile("", 4);
-         Tile baseTileForTestingAnimation1 = new Tile("", 8);
-         Tile baseTileForTestingAnimation2 = new Tile("", 12);
-         Tile baseTileForTestingAnimation3 = new Tile("", 16);
-         int[] ids = {4, 8, 12, 16};
-        baseTileForTestingAnimation.setSpriteSheet(ids);
-
-         baseTile.addLayer(secondLayerTile);
-         baseTile.addLayer(thirdLayerTile);
-         baseTile.addLayer(fourthLayerTile);
-
-         try {
-
-             Tile[][] map = new Tile[2][2];
-
-             map[0][0] = baseTile;
-             map[0][1] = secondLayerTile;
-             map[1][0] = thirdLayerTile;
-             map[1][1] = fourthLayerTile;
-
-//             FileHelper.saveMap(map);
-//             Tile[][] loadedMap = FileHelper.loadMap("src/main/resources/files/map.bin");
-//
-//             BufferedImage baseSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), loadedMap[0][0]);
-//             g.drawImage(baseSprite, 0, 850,
-//                     null);
-//
-//             BufferedImage firstLayer = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), loadedMap[0][1]);
-//             g.drawImage(firstLayer, 32, 850,
-//                     null);
-//
-//             BufferedImage secondLayer = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), loadedMap[1][0]);
-//             g.drawImage(secondLayer, 64, 850,
-//                     null);
-//
-//             BufferedImage thirdLayer = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), loadedMap[1][1]);
-//             g.drawImage(thirdLayer, 96, 850,
-//                     null);
-//
-//             ObjectOutputStream objectWriter = new ObjectOutputStream(new FileOutputStream("tile.bin"));
-//             objectWriter.writeObject(baseTile);
-//             objectWriter.close();
-//
-//             ObjectInputStream objectsReader = new ObjectInputStream(new FileInputStream("tile.bin"));
-//             Tile testTile = (Tile) objectsReader.readObject();
-             BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), baseTileForTestingAnimation);
-             g.drawImage(newSprite, 0, 850,
-                     null);
-
-
-         } catch (Exception ex) {
-             ex.printStackTrace();
-         }
-
-    }
-
     @Override
     public void draw(Graphics g) {
         super.drawBackground(g);
         super.drawTilesButton(g);
-        this.drawTestButton(g);
         this.drawTextButtons(g);
         Tile selectedTile = this.gameScreen.getCurrentScene().getSelectedTile();
         if (selectedTile != null) {

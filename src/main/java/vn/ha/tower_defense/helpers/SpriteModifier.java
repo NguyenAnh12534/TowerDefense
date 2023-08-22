@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.tiles.Tile;
 
-public interface SpriteModifier {
+public class SpriteModifier {
 
     public static BufferedImage buildSprite(TileManager tileManager, Tile tile) {
         BufferedImage baseSprite = tileManager.getSprite(tile);

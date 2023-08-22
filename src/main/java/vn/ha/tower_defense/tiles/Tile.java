@@ -1,5 +1,6 @@
 package vn.ha.tower_defense.tiles;
 
+import vn.ha.tower_defense.game.Game;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
 
@@ -12,11 +13,11 @@ import java.util.Queue;
 public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
-    
+
     private List<Tile> layers = new LinkedList<>();
     private int[] spriteIDs = new int[4];
     private int spriteID;
-    private  int currentIndex = 0;
+    private int currentIndex = 0;
     private String name;
     private Integer ID;
 
@@ -53,13 +54,15 @@ public class Tile implements Serializable, Observer {
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                if(spriteIDs[0] == 0)
+                if (spriteIDs[0] == 0)
                     return;
                 this.spriteID = spriteIDs[currentIndex];
+
                 currentIndex++;
-                if(currentIndex == spriteIDs.length)
+
+                if (currentIndex == spriteIDs.length)
                     currentIndex = 0;
-                System.out.println("Update status "  + this.spriteID);
+                System.out.println("Update status " + this.spriteID);
 
             }
             case OTHER -> {
@@ -75,7 +78,7 @@ public class Tile implements Serializable, Observer {
         this.spriteIDs = ids;
     }
 
-    public  int getSpriteID() {
+    public int getSpriteID() {
         return this.spriteID;
     }
 }

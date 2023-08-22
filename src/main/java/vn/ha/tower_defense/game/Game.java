@@ -2,7 +2,9 @@ package vn.ha.tower_defense.game;
 
 import vn.ha.tower_defense.exceptions.MapLoadException;
 import vn.ha.tower_defense.exceptions.SpriteLoadException;
+
 import javax.swing.JFrame;
+
 import vn.ha.tower_defense.inputs.KeyBoardListener;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
@@ -12,14 +14,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Game  extends JFrame  implements Runnable, Subject {
+public class Game extends JFrame implements Runnable, Subject {
 
     public static GameState currState = GameState.MENU;
-
     private List<Observer> observers = new ArrayList<>();
-
-    private final int FPS = 120;
-    private final int UPS = 10;
+    private static final int FPS = 120;
+    public static final int UPS = 5;
 
     public Game() {
         GameScreen gameScreen = new GameScreen(this);
@@ -33,7 +33,7 @@ public class Game  extends JFrame  implements Runnable, Subject {
 
     }
 
-    public void start() throws SpriteLoadException, MapLoadException{
+    public void start() throws SpriteLoadException, MapLoadException {
         Thread gameThread = new Thread(this);
         gameThread.start();
     }

@@ -32,9 +32,6 @@ public class GameScreen extends JPanel {
     private TileManager tileManager;
     private Map<GameState, Scene> gameScenes = new HashMap<>();
     private Game game;
-    //Testing
-    private Tile testTile;
-    private Tile testTile1;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -50,27 +47,6 @@ public class GameScreen extends JPanel {
         addMouseMotionListener(mouseListener);
         setupKeyBindings();
         requestFocus();
-
-        //Testing
-        Tile baseTileForTestingAnimation = new Tile("", 4);
-        int[] ids = {4, 8, 12, 16};
-        baseTileForTestingAnimation.setSpriteSheet(ids);
-        this.testTile = baseTileForTestingAnimation;
-        try {
-            ObjectOutputStream tileWritter = new ObjectOutputStream(new FileOutputStream("test.bin"));
-            tileWritter.writeObject(this.testTile);
-            tileWritter.close();
-
-            ObjectInputStream tileReader = new ObjectInputStream((new FileInputStream("test.bin")));
-
-            Tile testTile = (Tile) tileReader.readObject();
-            this.testTile1 = testTile;
-            game.attach(this.testTile1);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void loadScences() {
@@ -98,11 +74,6 @@ public class GameScreen extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //Testing
-        BufferedImage newSprite = SpriteModifier.buildSprite(this.getTileManager(), testTile1);
-        g.drawImage(newSprite, 0, 850,
-                null);
-        //End Testing
         renderGameScene(g);
     }
 

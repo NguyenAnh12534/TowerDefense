@@ -35,6 +35,10 @@ public class TileManager {
                 tileList.add(tile);
             }
         }
+        addAnimationForWaterSprite();
+    }
+
+    private void addAnimationForWaterSprite() {
         int[] ids = {getTile(1).getId(), 5,9,13};
         int[] ids1 = {2,6,10,14};
         int[] ids2 = {3,7,11,15};
