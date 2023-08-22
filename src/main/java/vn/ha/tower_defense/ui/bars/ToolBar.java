@@ -91,7 +91,7 @@ public class ToolBar extends Bar {
          Tile baseTileForTestingAnimation2 = new Tile("", 12);
          Tile baseTileForTestingAnimation3 = new Tile("", 16);
          int[] ids = {4, 8, 12, 16};
-        baseTileForTestingAnimation.setIds(ids);
+        baseTileForTestingAnimation.setSpriteSheet(ids);
 
          baseTile.addLayer(secondLayerTile);
          baseTile.addLayer(thirdLayerTile);
@@ -185,7 +185,7 @@ public class ToolBar extends Bar {
             if (textButton.getBound().contains(e.getPoint())) {
                 if (textButton.getText().equals("SAVE")) {
                     Tile[][] map = LevelBuilder.getLevelBuilder().getMap();
-                    saveMap(LevelBuilder.getLevelBuilder().getMap());
+                    saveMap(map);
                 }
             }
         });

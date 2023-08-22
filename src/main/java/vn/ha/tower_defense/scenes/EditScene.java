@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import vn.ha.tower_defense.game.Game;
 import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
@@ -45,8 +46,19 @@ public class EditScene extends Scene {
                 LevelBuilder.getLevelBuilder().setMap(map);
             }
             this.map = LevelBuilder.getLevelBuilder().getMap();
+            attachMapToGame();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void attachMapToGame() {
+        for (int i = 0; i < this.map.length; i++) {
+            for (int j = 0; j <  this.map[i].length; j++) {
+                this.gameScreen.getGame().attach(this.map[i][j]);
+                if(!this.map[i][j].getLayers().isEmpty())
+                this.gameScreen.getGame().attach(this.map[i][j].getLayers().get(this.map[i][j].getLayers().size()-1));
+            }
         }
     }
 

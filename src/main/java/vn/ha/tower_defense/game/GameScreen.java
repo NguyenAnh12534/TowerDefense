@@ -4,8 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import javax.swing.KeyStroke;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.inputs.GameMouseListener;
 import vn.ha.tower_defense.managers.TileManager;
+import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.scenes.MenuScene;
 import vn.ha.tower_defense.scenes.PlayScene;
 import vn.ha.tower_defense.scenes.EditScene;
@@ -32,7 +32,10 @@ public class GameScreen extends JPanel {
     private TileManager tileManager;
     private Map<GameState, Scene> gameScenes = new HashMap<>();
     private Game game;
+    //Testing
     private Tile testTile;
+    private Tile testTile1;
+
     public GameScreen(Game game) {
         this.game = game;
         this.tileManager = new TileManager();
@@ -51,9 +54,23 @@ public class GameScreen extends JPanel {
         //Testing
         Tile baseTileForTestingAnimation = new Tile("", 4);
         int[] ids = {4, 8, 12, 16};
-        baseTileForTestingAnimation.setIds(ids);
+        baseTileForTestingAnimation.setSpriteSheet(ids);
         this.testTile = baseTileForTestingAnimation;
-        game.attach(baseTileForTestingAnimation);
+        try {
+            ObjectOutputStream tileWritter = new ObjectOutputStream(new FileOutputStream("test.bin"));
+            tileWritter.writeObject(this.testTile);
+            tileWritter.close();
+
+            ObjectInputStream tileReader = new ObjectInputStream((new FileInputStream("test.bin")));
+
+            Tile testTile = (Tile) tileReader.readObject();
+            this.testTile1 = testTile;
+            game.attach(this.testTile1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void loadScences() {
@@ -82,7 +99,7 @@ public class GameScreen extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         //Testing
-        BufferedImage newSprite = SpriteModifier.buildSprite(this.getTileManager(), testTile);
+        BufferedImage newSprite = SpriteModifier.buildSprite(this.getTileManager(), testTile1);
         g.drawImage(newSprite, 0, 850,
                 null);
         //End Testing

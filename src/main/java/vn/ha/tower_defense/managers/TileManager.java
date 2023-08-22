@@ -39,10 +39,10 @@ public class TileManager {
         int[] ids1 = {2,6,10,14};
         int[] ids2 = {3,7,11,15};
         int[] ids3 = {4,8,12,16};
-        getTile(1).setIds(ids);
-        getTile(2).setIds(ids1);
-        getTile(3).setIds(ids2);
-        getTile(4).setIds(ids3);
+        getTile(1).setSpriteSheet(ids);
+        getTile(2).setSpriteSheet(ids1);
+        getTile(3).setSpriteSheet(ids2);
+        getTile(4).setSpriteSheet(ids3);
     }
 
     public void addTile(Tile tile) {
@@ -57,11 +57,11 @@ public class TileManager {
     }
 
     public BufferedImage getSprite(Tile tile) {
-        return this.sprites.get(tile.getId()-1);
+        return this.sprites.get(tile.getSpriteID()-1);
     }
 
     public static BufferedImage getSpriteBadWay(Tile tile) {
-        return badSprites.get(tile.getId()-1);
+        return badSprites.get(tile.getSpriteID()-1);
     }
 
 }

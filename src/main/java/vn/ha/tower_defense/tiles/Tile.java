@@ -6,20 +6,23 @@ import vn.ha.tower_defense.observers.Observer;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
     
-    private Queue<Tile> layers = new LinkedList<>();
-    private int[] ids = new int[4];
+    private List<Tile> layers = new LinkedList<>();
+    private int[] spriteIDs = new int[4];
+    private int spriteID;
     private  int currentIndex = 0;
     private String name;
     private Integer ID;
 
     public Tile(String name, int ID) {
         this.ID = ID;
+        this.spriteID = ID;
         this.name = name;
     }
 
@@ -42,7 +45,7 @@ public class Tile implements Serializable, Observer {
     }
 
 
-    public Queue<Tile> getLayers() {
+    public List<Tile> getLayers() {
         return this.layers;
     }
 
@@ -50,13 +53,13 @@ public class Tile implements Serializable, Observer {
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                if(ids[0] == 0)
+                if(spriteIDs[0] == 0)
                     return;
-                this.ID = ids[currentIndex];
+                this.spriteID = spriteIDs[currentIndex];
                 currentIndex++;
-                if(currentIndex == ids.length)
+                if(currentIndex == spriteIDs.length)
                     currentIndex = 0;
-                System.out.println("Update status "  + this.ID);
+                System.out.println("Update status "  + this.spriteID);
 
             }
             case OTHER -> {
@@ -68,7 +71,11 @@ public class Tile implements Serializable, Observer {
         }
     }
 
-    public void setIds(int[] ids) {
-        this.ids = ids;
+    public void setSpriteSheet(int[] ids) {
+        this.spriteIDs = ids;
+    }
+
+    public  int getSpriteID() {
+        return this.spriteID;
     }
 }

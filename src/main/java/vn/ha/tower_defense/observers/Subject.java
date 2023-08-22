@@ -10,6 +10,7 @@ public interface Subject {
 
     void attachAll(List<? extends Observer> observers);
 
+
     void detach(Observer observer);
 
     void notifyAllObserver(Event event);
