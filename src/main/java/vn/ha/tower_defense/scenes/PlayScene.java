@@ -12,6 +12,7 @@ import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
+import vn.ha.tower_defense.managers.EnemyManager;
 import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.map.LevelBuilder;
 import vn.ha.tower_defense.tiles.Tile;
@@ -21,21 +22,22 @@ import vn.ha.tower_defense.ui.bars.ToolBar;
 
 public class PlayScene extends Scene {
 
-    private Tile[][] map;
+    public static Tile[][] map;
     private Bar bottomBar;
     private GameScreen gameScreen;
     private Tile selectedTile;
     private Position mousePosition = new Position(0, 0);
-
+    private EnemyManager enemyManager;
 
     public PlayScene(GameScreen gameScreen) {
         super(gameScreen.getTileManager());
         this.gameScreen = gameScreen;
+        this.enemyManager = new EnemyManager();
+        this.gameScreen.getGame().attach(enemyManager);
         loadMap();
         this.bottomBar = new ActionBar(gameScreen);
 
     }
-
 
 
     private void loadMap() {
@@ -45,8 +47,19 @@ public class PlayScene extends Scene {
                 LevelBuilder.getLevelBuilder().setMap(map);
             }
             this.map = LevelBuilder.getLevelBuilder().getMap();
+            attachMapToGame();
         } catch (Exception e) {
 
+        }
+    }
+
+    private void attachMapToGame() {
+        for (int i = 0; i < this.map.length; i++) {
+            for (int j = 0; j < this.map[i].length; j++) {
+                this.gameScreen.getGame().attach(this.map[i][j]);
+                if (!this.map[i][j].getLayers().isEmpty())
+                    this.gameScreen.getGame().attach(this.map[i][j].getLayers().get(this.map[i][j].getLayers().size() - 1));
+            }
         }
     }
 
@@ -59,34 +72,33 @@ public class PlayScene extends Scene {
     public void render(Graphics g) {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
-                g.drawImage(this.gameScreen.getTileManager().getSprite(map[y][x]), x * 32, y * 32, null);
+                BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map[y][x]);
+                g.drawImage(newSprite, x * 32, y * 32,
+                        null);
             }
         }
-        
+        this.enemyManager.draw(g);
         this.bottomBar.draw(g);
-        if (selectedTile != null)
-            g.drawImage(this.gameScreen.getTileManager().getSprite(selectedTile), mousePosition.getX(), mousePosition.getY(), null);
     }
-
 
 
     @Override
     public void handleMouseClicked(MouseEvent e) {
-        if (e.getPoint().getY() >= this.bottomBar.getY()) {
-            this.bottomBar.handleMouseClicked(e);
-        } else {
-            map[mousePosition.getY() / 32][mousePosition.getX() / 32] = selectedTile;
-        }
+//        if (e.getPoint().getY() >= this.bottomBar.getY()) {
+//            this.bottomBar.handleMouseClicked(e);
+//        } else {
+//            map[mousePosition.getY() / 32][mousePosition.getX() / 32] = selectedTile;
+//        }
     }
 
     @Override
     public void handleMouseMoved(MouseEvent e) {
-        if (e.getPoint().getY() >= this.bottomBar.getY()) {
-            this.bottomBar.handleMouseMoved(e);
-        } else {
-            setCurrentMousePoint(e);
-
-        }
+//        if (e.getPoint().getY() >= this.bottomBar.getY()) {
+//            this.bottomBar.handleMouseMoved(e);
+//        } else {
+//            setCurrentMousePoint(e);
+//
+//        }
     }
 
     @Override
@@ -105,17 +117,17 @@ public class PlayScene extends Scene {
 
     @Override
     public void hanldeMouseDragged(MouseEvent e) {
-        if (e.getPoint().getY() >= this.bottomBar.getY()) {
-        } else {
-            setCurrentMousePoint(e);
-            map[mousePosition.getY() / 32][mousePosition.getX() / 32] = selectedTile;
-        }
+//        if (e.getPoint().getY() >= this.bottomBar.getY()) {
+//        } else {
+//            setCurrentMousePoint(e);
+//            map[mousePosition.getY() / 32][mousePosition.getX() / 32] = selectedTile;
+//        }
     }
 
     @Override
     public void hanldeKeyTyped(KeyEvent e) {
         System.out.println("rotate");
-        if(selectedTile != null) {
+        if (selectedTile != null) {
             int id = selectedTile.getId() % 4 == 0 ? selectedTile.getId() - 3 : selectedTile.getId() + 1;
             selectedTile = this.gameScreen.getTileManager().getTile(id);
         }

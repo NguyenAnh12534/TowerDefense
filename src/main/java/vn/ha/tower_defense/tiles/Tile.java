@@ -62,8 +62,6 @@ public class Tile implements Serializable, Observer {
 
                 if (currentIndex == spriteIDs.length)
                     currentIndex = 0;
-                System.out.println("Update status " + this.spriteID);
-
             }
             case OTHER -> {
                 System.out.println("Other event");
@@ -74,11 +72,27 @@ public class Tile implements Serializable, Observer {
         }
     }
 
+    public void setSpriteID(int spriteID) {
+        this.spriteID = spriteID;
+    }
+
+    public boolean isRoad() {
+        return this.spriteID >= 29 && spriteID<=36;
+    }
+
+    public boolean isLayer() {
+        return this.spriteID >= 17 && this.spriteID <= 28;
+    }
+
     public void setSpriteSheet(int[] ids) {
         this.spriteIDs = ids;
     }
 
     public int getSpriteID() {
         return this.spriteID;
+    }
+
+    public int[] getSpriteIDs() {
+        return this.spriteIDs;
     }
 }

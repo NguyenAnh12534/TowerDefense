@@ -54,10 +54,10 @@ public class EditScene extends Scene {
 
     private void attachMapToGame() {
         for (int i = 0; i < this.map.length; i++) {
-            for (int j = 0; j <  this.map[i].length; j++) {
+            for (int j = 0; j < this.map[i].length; j++) {
                 this.gameScreen.getGame().attach(this.map[i][j]);
-                if(!this.map[i][j].getLayers().isEmpty())
-                this.gameScreen.getGame().attach(this.map[i][j].getLayers().get(this.map[i][j].getLayers().size()-1));
+                if (!this.map[i][j].getLayers().isEmpty())
+                    this.gameScreen.getGame().attach(this.map[i][j].getLayers().get(this.map[i][j].getLayers().size() - 1));
             }
         }
     }
@@ -71,7 +71,6 @@ public class EditScene extends Scene {
     public void render(Graphics g) {
         for (int y = 0; y < map.length; y++) {
             for (int x = 0; x < map[y].length; x++) {
-
                 BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map[y][x]);
                 g.drawImage(newSprite, x * 32, y * 32,
                         null);
@@ -90,7 +89,16 @@ public class EditScene extends Scene {
         if (e.getPoint().getY() >= this.bottomBar.getY()) {
             this.bottomBar.handleMouseClicked(e);
         } else {
-            map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+            if(selectedTile.isLayer()) {
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+                System.out.println("Add layer: " + selectedTile.getSpriteID());
+            }
+            else {
+                System.out.println("Change from: " +  map[mousePosition.getY() / 32][mousePosition.getX() / 32].getSpriteID() + " to " + selectedTile.getSpriteID());
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteID(selectedTile.getSpriteID());
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteSheet(selectedTile.getSpriteIDs());
+
+            }
         }
     }
 
@@ -123,7 +131,16 @@ public class EditScene extends Scene {
         if (e.getPoint().getY() >= this.bottomBar.getY()) {
         } else {
             setCurrentMousePoint(e);
-            map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+            if(selectedTile.isLayer()) {
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+                System.out.println("Add layer: " + selectedTile.getSpriteID());
+            }
+            else {
+                System.out.println("Change from: " +  map[mousePosition.getY() / 32][mousePosition.getX() / 32].getSpriteID() + " to " + selectedTile.getSpriteID());
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteID(selectedTile.getSpriteID());
+                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteSheet(selectedTile.getSpriteIDs());
+
+            }
         }
     }
 
