@@ -12,9 +12,12 @@ public class Enemy implements Observer {
 
     private Position position;
     private int health = 100;
+
+    private int speed = 16;
+
     private int spriteID;
 
-    private Direction direction = Direction.FORWARD;
+    private Direction direction = Direction.DOWN;
 
     public Enemy(Position position, int spriteID) {
         this.position = position;
@@ -92,36 +95,75 @@ public class Enemy implements Observer {
         return nextPosition;
     }
 
-    public void findPath(Tile[][] map, double distance) {
+    public void findPath(Tile[][] map) {
+//        if()
+    }
 
-        Position originalPosition = this.position;
 
-        Position nextPosition = getNextPosition(distance);
-
-        Tile nextTile = map[(int)nextPosition.getX() / 32][(int)nextPosition.getY() / 32];
-        int x, y;
-        try {
-            while(!nextTile.isRoad()) {
-                this.direction = this.direction.getNextDirection();
-                this.position = getNextPosition(distance);
-                x = ((int)this.position.getX() > 0 ? (int)this.position.getX() : 0) / 32;
-                y = ((int)this.position.getY() > 0 ? (int)this.position.getY() : 0) / 32;
-                nextTile = map[y][x];
-            }
-        } catch (IndexOutOfBoundsException ex) {
-            System.out.println(this.position.getX() + " " + this.position.getY());
-            ex.printStackTrace();
+    public boolean isEnd() {
+        Position nextPosition = getNextPosition(this.speed);
+        if (nextPosition.getX() < 0 || nextPosition.getY() < 0) {
+            return true;
         }
 
-        this.position = originalPosition;
+        double x, y;
+
+        double rightEdge = nextPosition.getX() + 32;
+        double bottomEdge = nextPosition.getY() + 32;
+        switch (this.direction) {
+            case FORWARD -> {
+                x = (rightEdge);
+                y = (nextPosition.getY());
+            }
+            case DOWN -> {
+                x = (nextPosition.getX());
+                y = bottomEdge;
+            }
+            default -> {
+                x = (nextPosition.getX());
+                y = (nextPosition.getY());
+            }
+        }
+
+        if (y > PlayScene.map.length * 32 || x > PlayScene.map[0].length * 32)
+            return true;
+        return false;
+    }
+
+    private boolean isOnRoad(Position position) {
+
+        int x = (int) (position.getX()) / 32;
+        int y = (int) (position.getY()) / 32;
+
+        return PlayScene.map[y][x].isRoad();
+    }
+
+
+
+    public void turnLeft() {
+        this.direction = this.direction.getLeftDirection();
+    }
+    public void turnRight() {
+        this.direction = this.direction.getRightDirection();
+    }
+
+    public void turnAround() {
+        this.direction = this.direction.getLeftDirection().getLeftDirection();
     }
 
     @Override
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                this.findPath(PlayScene.map, 32);
-                this.move(10);
+                if (!this.isEnd())
+                    this.move(this.speed);
+                else {
+                    this.turnAround();
+                }
+
+                if(!isOnRoad(this.getPosition())) {
+
+                }
             }
             default -> {
                 System.out.println("Enemy do nothing");
@@ -134,6 +176,7 @@ public class Enemy implements Observer {
 
         private int id;
         private static Direction[] directions = {Direction.FORWARD, Direction.DOWN, Direction.BACKWARD, Direction.UP};
+
         Direction(int id) {
 
             this.id = id;
@@ -143,10 +186,17 @@ public class Enemy implements Observer {
             return id;
         }
 
-        public Direction getNextDirection() {
+        public Direction getLeftDirection() {
             int nextID = this.id + 1;
-            if(nextID > 3)
+            if (nextID >= directions.length)
                 nextID = 0;
+            return directions[nextID];
+        }
+
+        public Direction getRightDirection() {
+            int nextID = this.id - 1;
+            if (nextID < 0)
+                nextID = directions.length;
             return directions[nextID];
         }
     }

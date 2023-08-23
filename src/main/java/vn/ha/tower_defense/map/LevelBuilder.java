@@ -6,7 +6,7 @@ public class LevelBuilder {
 
     private static LevelBuilder levelBuilder;
 
-    private static Tile[][] map = new Tile[20][40];
+    private static Tile[][] map = new Tile[20][30];
 
 
     public static LevelBuilder getLevelBuilder() {
