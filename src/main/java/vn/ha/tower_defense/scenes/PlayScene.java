@@ -57,8 +57,6 @@ public class PlayScene extends Scene {
         for (int i = 0; i < this.map.length; i++) {
             for (int j = 0; j < this.map[i].length; j++) {
                 this.gameScreen.getGame().attach(this.map[i][j]);
-                if (!this.map[i][j].getLayers().isEmpty())
-                    this.gameScreen.getGame().attach(this.map[i][j].getLayers().get(this.map[i][j].getLayers().size() - 1));
             }
         }
     }

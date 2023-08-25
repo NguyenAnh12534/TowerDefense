@@ -53,6 +53,7 @@ public class Enemy implements Observer {
     }
 
     public Position getForwardPosition(double distance) {
+
         return new Position(position.getX() + distance, position.getY());
     }
 
@@ -131,18 +132,33 @@ public class Enemy implements Observer {
     }
 
     private boolean isOnRoad(Position position) {
-
-        int x = (int) (position.getX()) / 32;
-        int y = (int) (position.getY()) / 32;
+        if (position.getX() < 0 || position.getY() < 0) {
+            return false;
+        }
+        int x, y;
+        switch (this.direction) {
+            case FORWARD -> {
+                x = (int) ((position.getX() + 32) / 32);
+                y = (int) (position.getY()) / 32;
+            }
+            case DOWN -> {
+                x = (int) (position.getX()) / 32;
+                y = (int) ((position.getY() + 32) / 32);
+            }
+            default -> {
+                x = (int) (position.getX()) / 32;
+                y = (int) (position.getY()) / 32;
+            }
+        }
 
         return PlayScene.map[y][x].isRoad();
     }
 
 
-
     public void turnLeft() {
         this.direction = this.direction.getLeftDirection();
     }
+
     public void turnRight() {
         this.direction = this.direction.getRightDirection();
     }
@@ -151,24 +167,35 @@ public class Enemy implements Observer {
         this.direction = this.direction.getLeftDirection().getLeftDirection();
     }
 
+
     @Override
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                if (!this.isEnd())
-                    this.move(this.speed);
-                else {
-                    this.turnAround();
+                if (this.isEnd() || !isOnRoad(this.getNextPosition(this.speed))) {
+                    Direction originalDirection = this.direction;
+                    System.out.println(originalDirection.name());
+                    this.turnLeft();
+                    Position leftPosition = this.getNextPosition(this.speed);
+                    if (!isOnRoad(leftPosition)) {
+                        this.turnAround();
+                        Position rightPosition = this.getNextPosition(this.speed);
+                        if (!isOnRoad(rightPosition)) {
+                            this.direction = originalDirection;
+                            this.turnAround();
+                        }
+                    }
                 }
-
-                if(!isOnRoad(this.getPosition())) {
-
-                }
+                this.move(this.speed);
             }
             default -> {
                 System.out.println("Enemy do nothing");
             }
         }
+    }
+
+    private void moveExtraSpace() {
+
     }
 
     public enum Direction {
@@ -186,17 +213,17 @@ public class Enemy implements Observer {
             return id;
         }
 
-        public Direction getLeftDirection() {
+        public Direction getRightDirection() {
             int nextID = this.id + 1;
             if (nextID >= directions.length)
                 nextID = 0;
             return directions[nextID];
         }
 
-        public Direction getRightDirection() {
+        public Direction getLeftDirection() {
             int nextID = this.id - 1;
             if (nextID < 0)
-                nextID = directions.length;
+                nextID = directions.length - 1;
             return directions[nextID];
         }
     }
