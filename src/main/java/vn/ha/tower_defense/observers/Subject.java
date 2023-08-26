@@ -1,7 +1,5 @@
 package vn.ha.tower_defense.observers;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public interface Subject {
@@ -12,5 +10,7 @@ public interface Subject {
 
     void detach(Observer observer);
 
-    void notifyAllObserver(Event event);
+    void notifyAll(Event event);
+
+    void detachAll();
 }

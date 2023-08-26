@@ -13,7 +13,7 @@ public class Enemy implements Observer {
     private Position position;
     private int health = 100;
 
-    private int speed = 16;
+    private float speed = 4f;
 
     private int spriteID;
 
@@ -131,25 +131,36 @@ public class Enemy implements Observer {
         return false;
     }
 
+    private boolean isAtCorner() {
+        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map[(int) this.getPosition().getY() / 32][(int) this.getPosition().getX() / 32].getIsCorner();
+    }
+
     private boolean isOnRoad(Position position) {
+
         if (position.getX() < 0 || position.getY() < 0) {
             return false;
         }
         int x, y;
+
         switch (this.direction) {
             case FORWARD -> {
-                x = (int) ((position.getX() + 32) / 32);
+
+                x = (int) ((position.getX() + 31.99999) / 32);
                 y = (int) (position.getY()) / 32;
+
             }
             case DOWN -> {
                 x = (int) (position.getX()) / 32;
-                y = (int) ((position.getY() + 32) / 32);
+                y = (int) ((position.getY() + 31.99999) / 32);
             }
             default -> {
                 x = (int) (position.getX()) / 32;
                 y = (int) (position.getY()) / 32;
             }
         }
+//        if(y==1){
+//            System.out.println("wtf");
+//        }
 
         return PlayScene.map[y][x].isRoad();
     }
@@ -172,15 +183,17 @@ public class Enemy implements Observer {
     public void update(Event event) {
         switch (event.getEventType()) {
             case UPDATE -> {
-                if (this.isEnd() || !isOnRoad(this.getNextPosition(this.speed))) {
+                if (this.isEnd() || this.isAtCorner() || !isOnRoad(this.getNextPosition(this.speed))) {
                     Direction originalDirection = this.direction;
-                    System.out.println(originalDirection.name());
                     this.turnLeft();
                     Position leftPosition = this.getNextPosition(this.speed);
+                    System.out.println(this.direction);
                     if (!isOnRoad(leftPosition)) {
                         this.turnAround();
+                        System.out.println(this.direction);
                         Position rightPosition = this.getNextPosition(this.speed);
                         if (!isOnRoad(rightPosition)) {
+                            System.out.println("Turn around");
                             this.direction = originalDirection;
                             this.turnAround();
                         }

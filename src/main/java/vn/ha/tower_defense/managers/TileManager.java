@@ -1,6 +1,8 @@
 package vn.ha.tower_defense.managers;
 
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,8 @@ import java.util.Map;
 
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.tiles.Tile;
+
+import javax.imageio.ImageIO;
 
 public class TileManager {
 
@@ -18,10 +22,22 @@ public class TileManager {
     private static List<BufferedImage> badSprites = new ArrayList<>();
     private List<BufferedImage> sprites= new ArrayList<>();
 
+    public TileManager() {
+        loadAtlat(importImg());
+    }
 
     public void loadAtlat(BufferedImage atlas) {
         this.atlas = atlas;
         addTiles();
+    }
+    private BufferedImage importImg() {
+        try {
+            InputStream inputStream = new FileInputStream("src/main/resources/images/spriteatlas.png");
+            return ImageIO.read(inputStream);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     private void addTiles() {
@@ -35,7 +51,16 @@ public class TileManager {
                 tileList.add(tile);
             }
         }
+
+        markCorner();
         addAnimationForWaterSprite();
+    }
+
+    private void markCorner() {
+        getTile(29).setIsCorner(true);
+        getTile(30).setIsCorner(true);
+        getTile(31).setIsCorner(true);
+        getTile(32).setIsCorner(true);
     }
 
     private void addAnimationForWaterSprite() {

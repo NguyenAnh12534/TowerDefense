@@ -7,9 +7,11 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import vn.ha.tower_defense.managers.TileManager;
+import vn.ha.tower_defense.observers.Observer;
+import vn.ha.tower_defense.observers.Subject;
 import vn.ha.tower_defense.tiles.Tile;
 
-public abstract class  Scene implements Renderable {
+public abstract class  Scene implements Renderable, Observer, Subject {
 
     private TileManager tileManager;
 

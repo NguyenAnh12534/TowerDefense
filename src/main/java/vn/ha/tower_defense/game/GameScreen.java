@@ -17,14 +17,16 @@ import javax.swing.KeyStroke;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.inputs.GameMouseListener;
 import vn.ha.tower_defense.managers.TileManager;
+import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
+import vn.ha.tower_defense.observers.Subject;
 import vn.ha.tower_defense.scenes.MenuScene;
 import vn.ha.tower_defense.scenes.PlayScene;
 import vn.ha.tower_defense.scenes.EditScene;
 import vn.ha.tower_defense.scenes.Scene;
 import vn.ha.tower_defense.tiles.Tile;
 
-public class GameScreen extends JPanel {
+public class GameScreen extends JPanel implements Observer {
     private int width = 960;
     private int height = 960;
     private Render render = new Render();
@@ -36,7 +38,6 @@ public class GameScreen extends JPanel {
     public GameScreen(Game game) {
         this.game = game;
         this.tileManager = new TileManager();
-        this.tileManager.loadAtlat(importImg());
         game.attachAll(this.tileManager.getTiles());
 
         loadScences();
@@ -53,6 +54,7 @@ public class GameScreen extends JPanel {
         this.gameScenes.put(GameState.PLAYING, new PlayScene(this));
         this.gameScenes.put(GameState.EDIT, new EditScene(this));
         this.gameScenes.put(GameState.MENU, new MenuScene(this));
+        this.gameScene = gameScenes.get(Game.currState);
     }
 
     public Scene getCurrentScene() {
@@ -60,7 +62,6 @@ public class GameScreen extends JPanel {
     }
 
     private void renderGameScene(Graphics g) {
-        this.gameScene = this.gameScenes.get(Game.currState);
         render.renderScene(gameScene, g);
     }
 
@@ -69,6 +70,11 @@ public class GameScreen extends JPanel {
         setMinimumSize(dimension);
         setPreferredSize(dimension);
         setMaximumSize(dimension);
+    }
+
+    @Override
+    public void update(Event event) {
+        gameScene.update(event);
     }
 
     @Override
@@ -87,6 +93,7 @@ public class GameScreen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Perform your desired action here when SPACE key is pressed
                 Game.currState = GameState.PLAYING;
+                gameScene = gameScenes.get(Game.currState);
             }
         });
 
@@ -97,20 +104,12 @@ public class GameScreen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Perform your desired action here when SPACE key is pressed
                 Game.currState = GameState.MENU;
+                gameScene = gameScenes.get(Game.currState);
             }
         });
 
     }
 
-    private BufferedImage importImg() {
-        try {
-            InputStream inputStream = new FileInputStream("src/main/resources/images/spriteatlas.png");
-            return ImageIO.read(inputStream);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
 
     public TileManager getTileManager() {
         return this.tileManager;
@@ -125,9 +124,4 @@ public class GameScreen extends JPanel {
     public int getHeight() {
         return this.height;
     }
-
-    public Game getGame() {
-        return this.game;
-    }
-
 }

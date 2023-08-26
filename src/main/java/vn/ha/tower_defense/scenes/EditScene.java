@@ -1,25 +1,20 @@
 package vn.ha.tower_defense.scenes;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import vn.ha.tower_defense.game.Game;
 import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
-import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.map.LevelBuilder;
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.tiles.Tile;
-import vn.ha.tower_defense.ui.bars.ActionBar;
 import vn.ha.tower_defense.ui.bars.Bar;
 import vn.ha.tower_defense.ui.bars.ToolBar;
 
@@ -30,6 +25,8 @@ public class EditScene extends Scene {
     private GameScreen gameScreen;
     private Tile selectedTile;
     private Position mousePosition = new Position(0, 0);
+
+    private List<Observer> observers = new ArrayList<>();
 
     public EditScene(GameScreen gameScreen) {
         super(gameScreen.getTileManager());
@@ -46,7 +43,7 @@ public class EditScene extends Scene {
                 LevelBuilder.getLevelBuilder().setMap(map);
             }
             this.map = LevelBuilder.getLevelBuilder().getMap();
-            attachMapToGame();
+                attachMapToGame();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +52,7 @@ public class EditScene extends Scene {
     private void attachMapToGame() {
         for (int i = 0; i < this.map.length; i++) {
             for (int j = 0; j < this.map[i].length; j++) {
-                this.gameScreen.getGame().attach(this.map[i][j]);
+                this.attach(this.map[i][j]);
             }
         }
     }
@@ -92,9 +89,11 @@ public class EditScene extends Scene {
                 System.out.println("Add layer: " + selectedTile.getSpriteID());
             }
             else {
-                System.out.println("Change from: " +  map[mousePosition.getY() / 32][mousePosition.getX() / 32].getSpriteID() + " to " + selectedTile.getSpriteID());
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteID(selectedTile.getSpriteID());
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteSheet(selectedTile.getSpriteIDs());
+                Tile tileToUpdate = map[mousePosition.getY() / 32][mousePosition.getX() / 32];
+                System.out.println("Change from: " +  tileToUpdate.getSpriteID() + " to " + selectedTile.getSpriteID());
+                tileToUpdate.setSpriteID(selectedTile.getSpriteID());
+                tileToUpdate.setSpriteSheet(selectedTile.getSpriteIDs());
+                tileToUpdate.setIsCorner(selectedTile.getIsCorner());
 
             }
         }
@@ -160,4 +159,35 @@ public class EditScene extends Scene {
         this.selectedTile = sTile;
     }
 
+    @Override
+    public void update(Event event) {
+        notifyAll(event);
+    }
+
+    @Override
+    public void attach(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void attachAll(List<? extends Observer> observers) {
+
+    }
+
+    @Override
+    public void detach(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyAll(Event event) {
+        this.observers.forEach(observer -> {
+            observer.update(event);
+        });
+    }
+
+    @Override
+    public void detachAll() {
+        this.observers.clear();
+    }
 }

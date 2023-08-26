@@ -130,6 +130,7 @@ public class ToolBar extends Bar {
         for (TileButton gameButton : tileOptionBtns) {
             if (gameButton.getBound().contains(e.getPoint())) {
                 // Handle mouse clicked
+                System.out.println(gameButton.getTile().getIsCorner());
                 this.gameScreen.getCurrentScene().setSelectedTile(gameButton.getTile());
                 break;
             }

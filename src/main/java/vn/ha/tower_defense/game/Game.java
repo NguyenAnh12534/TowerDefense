@@ -10,8 +10,8 @@ import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.observers.Subject;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Game extends JFrame implements Runnable, Subject {
@@ -19,18 +19,17 @@ public class Game extends JFrame implements Runnable, Subject {
     public static GameState currState = GameState.MENU;
     private List<Observer> observers = new ArrayList<>();
     private static final int FPS = 120;
-    public static final int UPS = 5;
+    public static final int UPS = 20;
 
     public Game() {
         GameScreen gameScreen = new GameScreen(this);
         add(gameScreen);
-
+        attach(gameScreen);
         pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         addKeyListener(new KeyBoardListener(gameScreen));
-
     }
 
     public void start() throws SpriteLoadException, MapLoadException {
@@ -60,7 +59,7 @@ public class Game extends JFrame implements Runnable, Subject {
             }
 
             if (currentTime - lastUpdate >= TIME_PER_UPDATE) {
-                notifyAllObserver(updateEvent);
+                notifyAll(updateEvent);
                 lastUpdate = currentTime;
                 updateCounter++;
             }
@@ -79,6 +78,7 @@ public class Game extends JFrame implements Runnable, Subject {
         this.observers.add(observer);
     }
 
+
     @Override
     public void attachAll(List<? extends Observer> observers) {
         this.observers.addAll(observers);
@@ -90,7 +90,13 @@ public class Game extends JFrame implements Runnable, Subject {
     }
 
     @Override
-    public void notifyAllObserver(Event event) {
+    public void notifyAll(Event event) {
         this.observers.forEach(observer -> observer.update(event));
+    }
+
+
+    @Override
+    public void detachAll() {
+        this.observers.clear();
     }
 }

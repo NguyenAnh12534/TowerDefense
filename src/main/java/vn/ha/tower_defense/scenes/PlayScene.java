@@ -4,21 +4,20 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
+import java.util.ArrayList;
+import java.util.List;
 
 import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.managers.EnemyManager;
-import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.map.LevelBuilder;
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.tiles.Tile;
 import vn.ha.tower_defense.ui.bars.ActionBar;
 import vn.ha.tower_defense.ui.bars.Bar;
-import vn.ha.tower_defense.ui.bars.ToolBar;
 
 public class PlayScene extends Scene {
 
@@ -28,12 +27,13 @@ public class PlayScene extends Scene {
     private Tile selectedTile;
     private Position mousePosition = new Position(0, 0);
     private EnemyManager enemyManager;
+    private List< Observer> observers = new ArrayList<>();
 
     public PlayScene(GameScreen gameScreen) {
         super(gameScreen.getTileManager());
         this.gameScreen = gameScreen;
         this.enemyManager = new EnemyManager();
-        this.gameScreen.getGame().attach(enemyManager);
+        this.attach(enemyManager);
         loadMap();
         this.bottomBar = new ActionBar(gameScreen);
 
@@ -56,7 +56,7 @@ public class PlayScene extends Scene {
     private void attachMapToGame() {
         for (int i = 0; i < this.map.length; i++) {
             for (int j = 0; j < this.map[i].length; j++) {
-                this.gameScreen.getGame().attach(this.map[i][j]);
+                this.attach(this.map[i][j]);
             }
         }
     }
@@ -141,4 +141,37 @@ public class PlayScene extends Scene {
         this.selectedTile = sTile;
     }
 
+    @Override
+    public void update(Event event) {
+        notifyAll(event);
+    }
+
+    @Override
+    public void attach(Observer observer) {
+        this.observers.add(observer);
+    }
+
+
+
+    @Override
+    public void attachAll(List<? extends Observer> observers) {
+
+    }
+
+    @Override
+    public void detach(Observer observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyAll(Event event) {
+        this.observers.forEach(observer -> {
+            observer.update(event);
+        });
+    }
+
+    @Override
+    public void detachAll() {
+        this.observers.clear();
+    }
 }

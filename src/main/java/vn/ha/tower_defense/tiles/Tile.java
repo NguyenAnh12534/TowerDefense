@@ -13,7 +13,7 @@ import java.util.Queue;
 public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
-
+    private boolean isCorner = false;
     private List<Tile> layers = new LinkedList<>();
     private int[] spriteIDs = new int[4];
     private int spriteID;
@@ -35,6 +35,14 @@ public class Tile implements Serializable, Observer {
 
     public String getName() {
         return this.name;
+    }
+
+    public boolean getIsCorner() {
+        return this.isCorner;
+    }
+
+    public void setIsCorner(boolean isCorner) {
+        this.isCorner = isCorner;
     }
 
     public Integer getId() {
