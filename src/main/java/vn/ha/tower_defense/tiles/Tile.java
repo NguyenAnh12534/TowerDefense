@@ -1,19 +1,24 @@
 package vn.ha.tower_defense.tiles;
 
+import vn.ha.tower_defense.emnemies.Enemy;
 import vn.ha.tower_defense.game.Game;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Tile implements Serializable, Observer {
 
     private static final long serialVersionUID = 2146597398744064633L;
     private boolean isCorner = false;
+    private int animationSpeed = 6;
+
+
+
+    private int tick = 0;
+    private Set<Enemy.Direction> blockedDirections = new HashSet<>();
     private List<Tile> layers = new LinkedList<>();
     private int[] spriteIDs = new int[4];
     private int spriteID;
@@ -65,8 +70,12 @@ public class Tile implements Serializable, Observer {
                 if (spriteIDs[0] == 0)
                     return;
                 this.spriteID = spriteIDs[currentIndex];
-
-                currentIndex++;
+                if(this.tick >= this.animationSpeed) {
+                    currentIndex++;
+                    this.tick = 0;
+                } else {
+                    this.tick++;
+                }
 
                 if (currentIndex == spriteIDs.length)
                     currentIndex = 0;
@@ -85,7 +94,7 @@ public class Tile implements Serializable, Observer {
     }
 
     public boolean isRoad() {
-        return this.spriteID >= 29 && spriteID<=36;
+        return this.spriteID >= 29 && spriteID <= 36;
     }
 
     public boolean isLayer() {
@@ -102,5 +111,25 @@ public class Tile implements Serializable, Observer {
 
     public int[] getSpriteIDs() {
         return this.spriteIDs;
+    }
+
+    public Set<Enemy.Direction> getBlockedDirections() {
+        return this.blockedDirections;
+    }
+
+    public void addBlockedDirection(Enemy.Direction blockedDirection) {
+        this.blockedDirections.add(blockedDirection);
+    }
+
+    public void setBlockedDirections(Set<Enemy.Direction> directions) {
+        this.blockedDirections = directions;
+    }
+
+    public int getAnimationSpeed() {
+        return animationSpeed;
+    }
+
+    public void setAnimationSpeed(int animationSpeed) {
+        this.animationSpeed = animationSpeed;
     }
 }

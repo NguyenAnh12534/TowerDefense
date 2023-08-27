@@ -13,8 +13,9 @@ public class Enemy implements Observer {
     private Position position;
     private int health = 100;
 
-    private float speed = 4f;
-
+    private float stepLength = 8f;
+    private float speed = 0.5f;
+    private int tick = 0;
     private int spriteID;
 
     private Direction direction = Direction.DOWN;
@@ -102,7 +103,7 @@ public class Enemy implements Observer {
 
 
     public boolean isEnd() {
-        Position nextPosition = getNextPosition(this.speed);
+        Position nextPosition = getNextPosition(this.stepLength);
         if (nextPosition.getX() < 0 || nextPosition.getY() < 0) {
             return true;
         }
@@ -135,6 +136,10 @@ public class Enemy implements Observer {
         return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map[(int) this.getPosition().getY() / 32][(int) this.getPosition().getX() / 32].getIsCorner();
     }
 
+    private boolean isDirectionBlocked(Direction direction) {
+        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map[(int) this.getPosition().getY() / 32][(int) this.getPosition().getX() / 32].getBlockedDirections().contains(direction);
+    }
+
     private boolean isOnRoad(Position position) {
 
         if (position.getX() < 0 || position.getY() < 0) {
@@ -158,9 +163,6 @@ public class Enemy implements Observer {
                 y = (int) (position.getY()) / 32;
             }
         }
-//        if(y==1){
-//            System.out.println("wtf");
-//        }
 
         return PlayScene.map[y][x].isRoad();
     }
@@ -181,25 +183,30 @@ public class Enemy implements Observer {
 
     @Override
     public void update(Event event) {
+        if(this.tick < this.speed) {
+            this.tick++;
+            return;
+        }
         switch (event.getEventType()) {
             case UPDATE -> {
-                if (this.isEnd() || this.isAtCorner() || !isOnRoad(this.getNextPosition(this.speed))) {
+                if (this.isEnd() || this.isAtCorner() || !isOnRoad(this.getNextPosition(this.stepLength))) {
                     Direction originalDirection = this.direction;
                     this.turnLeft();
-                    Position leftPosition = this.getNextPosition(this.speed);
+                    Position leftPosition = this.getNextPosition(this.stepLength);
                     System.out.println(this.direction);
-                    if (!isOnRoad(leftPosition)) {
+                    if (!isOnRoad(leftPosition) || isDirectionBlocked(this.direction)) {
                         this.turnAround();
                         System.out.println(this.direction);
-                        Position rightPosition = this.getNextPosition(this.speed);
-                        if (!isOnRoad(rightPosition)) {
+                        Position rightPosition = this.getNextPosition(this.stepLength);
+                        if (!isOnRoad(rightPosition) || isDirectionBlocked(this.direction)) {
                             System.out.println("Turn around");
                             this.direction = originalDirection;
                             this.turnAround();
                         }
                     }
                 }
-                this.move(this.speed);
+                this.move(this.stepLength);
+                this.tick = 0;
             }
             default -> {
                 System.out.println("Enemy do nothing");

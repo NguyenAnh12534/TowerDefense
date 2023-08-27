@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import vn.ha.tower_defense.emnemies.Enemy;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.tiles.Tile;
 
@@ -32,7 +33,7 @@ public class TileManager {
     }
     private BufferedImage importImg() {
         try {
-            InputStream inputStream = new FileInputStream("src/main/resources/images/spriteatlas.png");
+            InputStream inputStream = this.getClass().getResourceAsStream("/images/spriteatlas.png");
             return ImageIO.read(inputStream);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -52,15 +53,24 @@ public class TileManager {
             }
         }
 
-        markCorner();
+        markCorners();
         addAnimationForWaterSprite();
     }
 
-    private void markCorner() {
+    private void markCorners() {
         getTile(29).setIsCorner(true);
+        getTile(29).addBlockedDirection(Enemy.Direction.BACKWARD);
+        getTile(29).addBlockedDirection(Enemy.Direction.UP);
         getTile(30).setIsCorner(true);
+        getTile(30).addBlockedDirection(Enemy.Direction.FORWARD);
+        getTile(30).addBlockedDirection(Enemy.Direction.UP);
         getTile(31).setIsCorner(true);
+        getTile(31).addBlockedDirection(Enemy.Direction.FORWARD);
+        getTile(31).addBlockedDirection(Enemy.Direction.DOWN);
         getTile(32).setIsCorner(true);
+        getTile(32).addBlockedDirection(Enemy.Direction.DOWN);
+        getTile(32).addBlockedDirection(Enemy.Direction.BACKWARD);
+
     }
 
     private void addAnimationForWaterSprite() {

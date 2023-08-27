@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>vn.ha</groupId>
+    <artifactId>tower_defense</artifactId>
+    <version>1</version>
+    <build>
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+        <!--                <version>3.8.1</version> &lt;!&ndash; Use the latest version of the plugin &ndash;&gt;-->
+        <!--                <configuration>-->
+        <!--                    <source>17</source> &lt;!&ndash; Set your desired Java source version &ndash;&gt;-->
+        <!--                    <target>17</target> &lt;!&ndash; Set your desired Java target version &ndash;&gt;-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-jar-plugin</artifactId>-->
+        <!--                <version>3.2.0</version> &lt;!&ndash; Use the latest version of the plugin &ndash;&gt;-->
+        <!--                <configuration>-->
+        <!--                    <archive>-->
+        <!--                        <manifest>-->
+        <!--                            <mainClass>vn.ha.tower_defense.TowerDefenseApplication</mainClass> &lt;!&ndash; Specify your main class here &ndash;&gt;-->
+        <!--                        </manifest>-->
+        <!--                    </archive>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <finalName>my-project-name</finalName>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version> <!-- Use the latest version of the plugin -->
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>vn.ha.tower_defense.TowerDefenseApplication
+                            </mainClass> <!-- Specify your main class here -->
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

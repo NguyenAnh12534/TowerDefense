@@ -23,7 +23,7 @@ public class EnemyManager implements Observer {
     }
 
     private void loadEnemies() {
-        BufferedImage atlast = loadAtlast("src/main/resources/images/spriteatlas.png");
+        BufferedImage atlast = loadAtlast("/images/spriteatlas.png");
 
         BufferedImage oreSprite = atlast.getSubimage(0, 32, 32, 32);
         enemySprites.add(oreSprite);
@@ -35,7 +35,7 @@ public class EnemyManager implements Observer {
 
     private BufferedImage loadAtlast(String mapPath) {
         try {
-            InputStream inputStream = new FileInputStream(mapPath);
+            InputStream inputStream = this.getClass().getResourceAsStream(mapPath);
             return ImageIO.read(inputStream);
 
         } catch (Exception ex) {

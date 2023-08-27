@@ -62,6 +62,7 @@ public class GameScreen extends JPanel implements Observer {
     }
 
     private void renderGameScene(Graphics g) {
+        gameScene = gameScenes.get(Game.currState);
         render.renderScene(gameScene, g);
     }
 
@@ -93,7 +94,6 @@ public class GameScreen extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
                 // Perform your desired action here when SPACE key is pressed
                 Game.currState = GameState.PLAYING;
-                gameScene = gameScenes.get(Game.currState);
             }
         });
 
@@ -104,7 +104,6 @@ public class GameScreen extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
                 // Perform your desired action here when SPACE key is pressed
                 Game.currState = GameState.MENU;
-                gameScene = gameScenes.get(Game.currState);
             }
         });
 

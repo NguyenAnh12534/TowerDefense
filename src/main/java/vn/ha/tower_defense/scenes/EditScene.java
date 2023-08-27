@@ -94,7 +94,12 @@ public class EditScene extends Scene {
                 tileToUpdate.setSpriteID(selectedTile.getSpriteID());
                 tileToUpdate.setSpriteSheet(selectedTile.getSpriteIDs());
                 tileToUpdate.setIsCorner(selectedTile.getIsCorner());
-
+                tileToUpdate.setBlockedDirections(selectedTile.getBlockedDirections());
+                tileToUpdate.setAnimationSpeed(selectedTile.getAnimationSpeed());
+                if(selectedTile.getSpriteID() >= 29 && selectedTile.getSpriteID() <= 32)
+                {
+                    System.out.println();
+                }
             }
         }
     }
