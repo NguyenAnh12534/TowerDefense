@@ -38,7 +38,7 @@ public class EditScene extends Scene {
 
     private void loadMap() {
         try {
-            Tile[][] map = FileHelper.loadMap("src/main/resources/files/map.bin");
+            Tile[][] map = FileHelper.loadMap("map/map.bin");
             if (map != null) {
                 LevelBuilder.getLevelBuilder().setMap(map);
             }

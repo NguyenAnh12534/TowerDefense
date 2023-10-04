@@ -19,9 +19,6 @@ public class Matrix2D<T> implements Matrix<T> {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j <  width; j++) {
                 T nextElement = elements[currentIndex];
-                if(currentIndex == elements.length) {
-                    nextElement = null;
-                }
                 this.matrix[i][j] = nextElement;
                 currentIndex++;
             }
