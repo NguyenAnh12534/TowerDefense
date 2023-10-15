@@ -12,6 +12,7 @@ import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.map.LevelBuilder;
+import vn.ha.tower_defense.map.TileMap;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.tiles.Tile;
@@ -19,7 +20,7 @@ import vn.ha.tower_defense.ui.bars.Bar;
 import vn.ha.tower_defense.ui.bars.ToolBar;
 
 public class EditScene extends Scene {
-    private Tile[][] map;
+    private TileMap map;
     private Bar bottomBar;
     private GameScreen gameScreen;
     private Tile selectedTile;
@@ -36,21 +37,17 @@ public class EditScene extends Scene {
 
     private void loadMap() {
         try {
-            Tile[][] map = FileHelper.loadMap("map/map.bin");
-            if (map != null) {
-                LevelBuilder.getLevelBuilder().setMap(map);
-            }
             this.map = LevelBuilder.getLevelBuilder().getMap();
-                attachMapToGame();
+            attachMapToGame();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void attachMapToGame() {
-        for (int i = 0; i < this.map.length; i++) {
-            for (int j = 0; j < this.map[i].length; j++) {
-                this.attach(this.map[i][j]);
+        for (int i = 0; i < this.map.getHeight(); i++) {
+            for (int j = 0; j < this.map.getWidth(); j++) {
+                this.attach(this.map.getTileAt(i, j));
             }
         }
     }
@@ -62,9 +59,9 @@ public class EditScene extends Scene {
 
     @Override
     public void render(Graphics g) {
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[y].length; x++) {
-                BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map[y][x]);
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map.getTileAt(y, x));
                 g.drawImage(newSprite, x * 32, y * 32,
                         null);
             }
@@ -82,20 +79,20 @@ public class EditScene extends Scene {
         if (e.getPoint().getY() >= this.bottomBar.getY()) {
             this.bottomBar.handleMouseClicked(e);
         } else {
-            if(selectedTile.isLayer()) {
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+            if (selectedTile.isLayer()) {
+                map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32).addLayer(selectedTile);
                 System.out.println("Add layer: " + selectedTile.getSpriteID());
-            }
-            else {
-                Tile tileToUpdate = map[mousePosition.getY() / 32][mousePosition.getX() / 32];
-                System.out.println("Change from: " +  tileToUpdate.getSpriteID() + " to " + selectedTile.getSpriteID());
+            } else {
+                Tile tileToUpdate = map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32);
+                System.out.println("Change from: " + tileToUpdate.getSpriteID() + " to " + selectedTile.getSpriteID());
+
                 tileToUpdate.setSpriteID(selectedTile.getSpriteID());
                 tileToUpdate.setSpriteSheet(selectedTile.getSpriteIDs());
                 tileToUpdate.setIsCorner(selectedTile.getIsCorner());
                 tileToUpdate.setBlockedDirections(selectedTile.getBlockedDirections());
                 tileToUpdate.setAnimationSpeed(selectedTile.getAnimationSpeed());
-                if(selectedTile.getSpriteID() >= 29 && selectedTile.getSpriteID() <= 32)
-                {
+
+                if (selectedTile.getSpriteID() >= 29 && selectedTile.getSpriteID() <= 32) {
                     System.out.println();
                 }
             }
@@ -131,14 +128,13 @@ public class EditScene extends Scene {
         if (e.getPoint().getY() >= this.bottomBar.getY()) {
         } else {
             setCurrentMousePoint(e);
-            if(selectedTile.isLayer()) {
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].addLayer(selectedTile);
+            if (selectedTile.isLayer()) {
+                map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32).addLayer(selectedTile);
                 System.out.println("Add layer: " + selectedTile.getSpriteID());
-            }
-            else {
-                System.out.println("Change from: " +  map[mousePosition.getY() / 32][mousePosition.getX() / 32].getSpriteID() + " to " + selectedTile.getSpriteID());
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteID(selectedTile.getSpriteID());
-                map[mousePosition.getY() / 32][mousePosition.getX() / 32].setSpriteSheet(selectedTile.getSpriteIDs());
+            } else {
+                System.out.println("Change from: " + map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32).getSpriteID() + " to " + selectedTile.getSpriteID());
+                map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32).setSpriteID(selectedTile.getSpriteID());
+                map.getTileAt(mousePosition.getY() / 32, mousePosition.getX() / 32).setSpriteSheet(selectedTile.getSpriteIDs());
 
             }
         }

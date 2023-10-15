@@ -1,13 +1,6 @@
 package vn.ha.tower_defense.helpers;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,17 +38,7 @@ public class FileHelper {
         tileWriter.close();
     }
 
-    public static Tile[][] loadMap(String tileMap) throws Exception {
-        File mapFile = null;
-        try {
-            mapFile = new File(tileMap);
-        }catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        if (!mapFile.exists()) {
-           return null;
-        }
+    public static Tile[][] getMapFromFile(File mapFile) throws Exception{
         InputStream inputStream = new FileInputStream(mapFile);
 
         ObjectInputStream mapReader = new ObjectInputStream(inputStream);
@@ -71,5 +54,25 @@ public class FileHelper {
         }
         mapReader.close();
         return map;
+    }
+
+    public static File getFileFromPath(String mapPath) throws FileNotFoundException {
+        File mapFile = null;
+        try {
+            mapFile = new File(mapPath);
+        }catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        if (!mapFile.exists()) {
+            throw new FileNotFoundException();
+        }
+        return mapFile;
+    }
+
+
+    public static Tile[][] loadMapFromPath(String mapPath) throws Exception {
+        File mapFile = getFileFromPath(mapPath);
+        return getMapFromFile(mapFile);
     }
 }

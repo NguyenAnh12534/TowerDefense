@@ -127,17 +127,17 @@ public class Enemy implements Observer {
             }
         }
 
-        if (y > PlayScene.map.length * 32 || x > PlayScene.map[0].length * 32)
+        if (y > PlayScene.map.getHeight() * 32 || x > PlayScene.map.getWidth() * 32)
             return true;
         return false;
     }
 
     private boolean isAtCorner() {
-        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map[(int) this.getPosition().getY() / 32][(int) this.getPosition().getX() / 32].getIsCorner();
+        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map.getTileAt((int) this.getPosition().getY() / 32, (int) this.getPosition().getX() / 32).getIsCorner();
     }
 
     private boolean isDirectionBlocked(Direction direction) {
-        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map[(int) this.getPosition().getY() / 32][(int) this.getPosition().getX() / 32].getBlockedDirections().contains(direction);
+        return this.getPosition().getY() % 32 == 0 && this.getPosition().getX() % 32 == 0 &&  PlayScene.map.getTileAt((int) this.getPosition().getY() / 32, (int) this.getPosition().getX() / 32).getBlockedDirections().contains(direction);
     }
 
     private boolean isOnRoad(Position position) {
@@ -164,7 +164,7 @@ public class Enemy implements Observer {
             }
         }
 
-        return PlayScene.map[y][x].isRoad();
+        return PlayScene.map.getTileAt(y, x).isRoad();
     }
 
 

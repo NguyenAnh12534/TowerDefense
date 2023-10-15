@@ -13,6 +13,7 @@ import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.managers.EnemyManager;
 import vn.ha.tower_defense.map.LevelBuilder;
+import vn.ha.tower_defense.map.TileMap;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.tiles.Tile;
@@ -21,13 +22,13 @@ import vn.ha.tower_defense.ui.bars.Bar;
 
 public class PlayScene extends Scene {
 
-    public static Tile[][] map;
+    public static TileMap map;
     private Bar bottomBar;
     private GameScreen gameScreen;
     private Tile selectedTile;
     private Position mousePosition = new Position(0, 0);
     private EnemyManager enemyManager;
-    private List< Observer> observers = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
 
     public PlayScene(GameScreen gameScreen) {
         super(gameScreen.getTileManager());
@@ -41,22 +42,14 @@ public class PlayScene extends Scene {
 
 
     private void loadMap() {
-        try {
-            Tile[][] map = FileHelper.loadMap("map/map.bin");
-            if (map != null) {
-                LevelBuilder.getLevelBuilder().setMap(map);
-            }
-            this.map = LevelBuilder.getLevelBuilder().getMap();
-            attachMapToGame();
-        } catch (Exception e) {
-
-        }
+        map = LevelBuilder.getLevelBuilder().getMap();
+        attachMapToGame();
     }
 
     private void attachMapToGame() {
-        for (int i = 0; i < this.map.length; i++) {
-            for (int j = 0; j < this.map[i].length; j++) {
-                this.attach(this.map[i][j]);
+        for (int i = 0; i < map.getHeight(); i++) {
+            for (int j = 0; j < map.getWidth(); j++) {
+                this.attach(map.getTileAt(i, j));
             }
         }
     }
@@ -68,9 +61,9 @@ public class PlayScene extends Scene {
 
     @Override
     public void render(Graphics g) {
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[y].length; x++) {
-                BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map[y][x]);
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                BufferedImage newSprite = SpriteModifier.buildSprite(this.gameScreen.getTileManager(), map.getTileAt(y, x));
                 g.drawImage(newSprite, x * 32, y * 32,
                         null);
             }
@@ -153,7 +146,6 @@ public class PlayScene extends Scene {
     public void attach(Observer observer) {
         this.observers.add(observer);
     }
-
 
 
     @Override

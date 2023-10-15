@@ -6,7 +6,7 @@ public class LevelBuilder {
 
     private static LevelBuilder levelBuilder;
 
-    private static Tile[][] map = new Tile[20][30];
+    private static TileMap map = new TileMap();
 
 
     public static LevelBuilder getLevelBuilder() {
@@ -17,25 +17,7 @@ public class LevelBuilder {
         return levelBuilder;
     }
 
-    public Tile[][] getMap() {
-
-        if (map[0][0] == null) {
-            buildMap();
-        }
-
+    public TileMap getMap() {
         return LevelBuilder.map;
-    }
-
-    private void buildMap() {
-        
-        for (int y = 0; y < map.length; y++) {
-            for (int x = 0; x < map[y].length; x++) {
-                map[y][x] = new Tile( null, 1);
-            }
-        }
-    }
-
-    public void setMap(Tile[][] map) {
-        LevelBuilder.map = map;
     }
 }

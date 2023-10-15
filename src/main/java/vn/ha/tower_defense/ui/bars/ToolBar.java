@@ -141,8 +141,8 @@ public class ToolBar extends Bar implements Publisher {
     }
 
     private void handleSaveButtonClicked() {
-        Tile[][] map = LevelBuilder.getLevelBuilder().getMap();
-        saveMap(map);
+        saveMap(LevelBuilder.getLevelBuilder().getMap().getMap());
+        System.out.println("Saving map");
         this.notifyAll(Event
                 .builder()
                 .message("Save map")
