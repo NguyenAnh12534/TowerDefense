@@ -9,10 +9,11 @@ import java.awt.event.MouseEvent;
 
 import vn.ha.tower_defense.game.GameScreen;
 
+import vn.ha.tower_defense.observers.Publisher;
 import vn.ha.tower_defense.ui.buttons.GameButton;
 import vn.ha.tower_defense.ui.buttons.TileButton;
 
-public abstract class Bar {
+public abstract class Bar implements Publisher {
     private GameScreen gameScreen;
 
     public Bar(GameScreen gameScreen) {

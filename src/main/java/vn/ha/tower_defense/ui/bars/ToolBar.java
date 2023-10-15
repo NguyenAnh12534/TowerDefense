@@ -5,6 +5,9 @@ import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
 import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.map.LevelBuilder;
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
+import vn.ha.tower_defense.observers.Publisher;
 import vn.ha.tower_defense.scenes.Scene;
 import vn.ha.tower_defense.tiles.Tile;
 import vn.ha.tower_defense.ui.buttons.GameButton;
@@ -22,13 +25,14 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToolBar extends Bar {
+public class ToolBar extends Bar implements Publisher {
     private int x, y, witdh, height = 320;
     private Color color = new Color(107, 201, 250, 98);
     private GameScreen gameScreen;
     private Position selectedTilePosition = new Position(700, 700);
     private List<TileButton> tileOptionBtns;
     private List<TextButton> textButtons;
+    private List<Observer> observers = new ArrayList<>();
 
     public ToolBar(GameScreen gameScreen) {
         super(gameScreen);
@@ -121,8 +125,7 @@ public class ToolBar extends Bar {
         textButtons.forEach(textButton -> {
             if (textButton.getBound().contains(e.getPoint())) {
                 if (textButton.getText().equals("SAVE")) {
-                    Tile[][] map = LevelBuilder.getLevelBuilder().getMap();
-                    saveMap(map);
+                    handleSaveButtonClicked();
                 }
             }
         });
@@ -135,6 +138,16 @@ public class ToolBar extends Bar {
                 break;
             }
         }
+    }
+
+    private void handleSaveButtonClicked() {
+        Tile[][] map = LevelBuilder.getLevelBuilder().getMap();
+        saveMap(map);
+        this.notifyAll(Event
+                .builder()
+                .message("Save map")
+                .eventType(Event.EventType.SAVE_MAP)
+                .build());
     }
 
     @Override
@@ -180,5 +193,30 @@ public class ToolBar extends Bar {
     @Override
     protected List<TileButton> getTileButtons() {
         return this.tileOptionBtns;
+    }
+
+    @Override
+    public void attach(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void attachAll(List<? extends Observer> observers) {
+        this.observers.addAll(observers);
+    }
+
+    @Override
+    public void detach(Observer observer) {
+
+    }
+
+    @Override
+    public void notifyAll(Event event) {
+        this.observers.forEach(observer -> observer.update(event));
+    }
+
+    @Override
+    public void detachAll() {
+
     }
 }

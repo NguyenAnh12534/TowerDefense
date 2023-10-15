@@ -3,28 +3,24 @@ package vn.ha.tower_defense.game;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-import vn.ha.tower_defense.helpers.SpriteModifier;
 import vn.ha.tower_defense.inputs.GameMouseListener;
 import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
-import vn.ha.tower_defense.observers.Subject;
+import vn.ha.tower_defense.observers.Publisher;
 import vn.ha.tower_defense.scenes.MenuScene;
 import vn.ha.tower_defense.scenes.PlayScene;
 import vn.ha.tower_defense.scenes.EditScene;
 import vn.ha.tower_defense.scenes.Scene;
-import vn.ha.tower_defense.tiles.Tile;
 
 public class GameScreen extends JPanel implements Observer {
     private int width = 960;
@@ -40,7 +36,7 @@ public class GameScreen extends JPanel implements Observer {
         this.tileManager = new TileManager();
         game.attachAll(this.tileManager.getTiles());
 
-        loadScences();
+        loadScenes();
 
         setSize();
         GameMouseListener mouseListener = new GameMouseListener(this);
@@ -50,11 +46,27 @@ public class GameScreen extends JPanel implements Observer {
         requestFocus();
     }
 
-    private void loadScences() {
-        this.gameScenes.put(GameState.PLAYING, new PlayScene(this));
-        this.gameScenes.put(GameState.EDIT, new EditScene(this));
-        this.gameScenes.put(GameState.MENU, new MenuScene(this));
+    private void loadScenes() {
+        this.initScenes();
+        this.linkScenes();
+    }
+
+    private void initScenes() {
+        Scene playScene = new PlayScene(this);
+        Scene editScene = new EditScene(this);
+        Scene menuScene = new MenuScene(this);
+
+        this.gameScenes.put(GameState.PLAYING, playScene);
+        this.gameScenes.put(GameState.EDIT, editScene);
+        this.gameScenes.put(GameState.MENU, menuScene);
         this.gameScene = gameScenes.get(Game.currState);
+    }
+
+    private void linkScenes(){
+        Scene editScene = this.gameScenes.get(GameState.EDIT);
+        Scene playScene = this.gameScenes.get(GameState.PLAYING);
+
+        editScene.attach(playScene);
     }
 
     public Scene getCurrentScene() {

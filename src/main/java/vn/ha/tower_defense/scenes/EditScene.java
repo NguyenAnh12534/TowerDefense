@@ -19,7 +19,6 @@ import vn.ha.tower_defense.ui.bars.Bar;
 import vn.ha.tower_defense.ui.bars.ToolBar;
 
 public class EditScene extends Scene {
-
     private Tile[][] map;
     private Bar bottomBar;
     private GameScreen gameScreen;
@@ -32,8 +31,7 @@ public class EditScene extends Scene {
         super(gameScreen.getTileManager());
         this.gameScreen = gameScreen;
         loadMap();
-        this.bottomBar = new ToolBar(gameScreen);
-
+        this.setBottomBar(new ToolBar(gameScreen));
     }
 
     private void loadMap() {
@@ -194,5 +192,14 @@ public class EditScene extends Scene {
     @Override
     public void detachAll() {
         this.observers.clear();
+    }
+
+    public Bar getBottomBar() {
+        return bottomBar;
+    }
+
+    public void setBottomBar(Bar bottomBar) {
+        this.bottomBar = bottomBar;
+        this.bottomBar.attach(this);
     }
 }

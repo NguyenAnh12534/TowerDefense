@@ -2,7 +2,7 @@ package vn.ha.tower_defense.observers;
 
 import java.util.List;
 
-public interface Subject {
+public interface Publisher {
 
     void attach(Observer observer);
 

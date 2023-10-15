@@ -34,7 +34,7 @@ public class PlayScene extends Scene {
         this.gameScreen = gameScreen;
         this.enemyManager = new EnemyManager();
         this.attach(enemyManager);
-        loadMap();
+        this.loadMap();
         this.bottomBar = new ActionBar(gameScreen);
 
     }
@@ -143,7 +143,10 @@ public class PlayScene extends Scene {
 
     @Override
     public void update(Event event) {
-        notifyAll(event);
+        switch (event.getEventType()) {
+            case UPDATE -> notifyAll(event);
+            case SAVE_MAP -> this.loadMap();
+        }
     }
 
     @Override

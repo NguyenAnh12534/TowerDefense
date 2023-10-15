@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 
 import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
+import vn.ha.tower_defense.observers.Event;
+import vn.ha.tower_defense.observers.Observer;
 import vn.ha.tower_defense.tiles.Tile;
 import vn.ha.tower_defense.ui.buttons.GameButton;
 import vn.ha.tower_defense.ui.buttons.TileButton;
@@ -135,5 +137,30 @@ public class ActionBar extends Bar {
     @Override
     protected List<TileButton> getTileButtons() {
         return this.tileOptionBtns;
+    }
+
+    @Override
+    public void attach(Observer observer) {
+
+    }
+
+    @Override
+    public void attachAll(List<? extends Observer> observers) {
+
+    }
+
+    @Override
+    public void detach(Observer observer) {
+
+    }
+
+    @Override
+    public void notifyAll(Event event) {
+
+    }
+
+    @Override
+    public void detachAll() {
+
     }
 }

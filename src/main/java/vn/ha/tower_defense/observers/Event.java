@@ -1,6 +1,7 @@
 package vn.ha.tower_defense.observers;
 
 import jdk.jfr.EventType;
+import vn.ha.tower_defense.builder.EventBuilder;
 
 public class Event {
     private String message;
@@ -27,7 +28,11 @@ public class Event {
         this.eventType = eventType;
     }
 
+    public static EventBuilder builder() {
+        return new EventBuilder();
+    }
+
     public enum EventType{
-        UPDATE, OTHER;
+        UPDATE, OTHER, SAVE_MAP;
     }
 }

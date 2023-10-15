@@ -14,7 +14,7 @@ public class TowerDefenseApplication {
         try {
             game.start();
         } catch (BaseException ez) {
-
+            System.out.println(ez.getMessage());
         }
 
     }

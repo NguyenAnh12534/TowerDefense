@@ -4,12 +4,10 @@ import vn.ha.tower_defense.emnemies.Enemy;
 import vn.ha.tower_defense.emnemies.Position;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
-import vn.ha.tower_defense.observers.Subject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

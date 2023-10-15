@@ -8,13 +8,12 @@ import javax.swing.JFrame;
 import vn.ha.tower_defense.inputs.KeyBoardListener;
 import vn.ha.tower_defense.observers.Event;
 import vn.ha.tower_defense.observers.Observer;
-import vn.ha.tower_defense.observers.Subject;
+import vn.ha.tower_defense.observers.Publisher;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends JFrame implements Runnable, Subject {
+public class Game extends JFrame implements Runnable, Publisher {
 
     public static GameState currState = GameState.MENU;
     private List<Observer> observers = new ArrayList<>();

@@ -1,17 +1,14 @@
 package vn.ha.tower_defense.scenes;
 
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import vn.ha.tower_defense.managers.TileManager;
 import vn.ha.tower_defense.observers.Observer;
-import vn.ha.tower_defense.observers.Subject;
+import vn.ha.tower_defense.observers.Publisher;
 import vn.ha.tower_defense.tiles.Tile;
 
-public abstract class  Scene implements Renderable, Observer, Subject {
+public abstract class  Scene implements Renderable, Observer, Publisher {
 
     private TileManager tileManager;
 
