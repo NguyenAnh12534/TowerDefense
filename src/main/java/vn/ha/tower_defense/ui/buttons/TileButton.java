@@ -18,13 +18,7 @@ public class TileButton extends GameButton {
     @Override
     public void draw(Graphics g) {
         drawTile(g);
-        if (super.getIsHovered()) {
-            super.drawHoverEffect(g);
-        }
-
-        if (super.getIsPressed()) {
-            super.drawPressedEffect(g);
-        }
+        super.drawAffect(g);
     }
 
     private void drawTile(Graphics g) {

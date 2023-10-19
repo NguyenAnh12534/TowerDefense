@@ -1,5 +1,6 @@
 package vn.ha.tower_defense.ui.bars;
 
+import org.w3c.dom.Text;
 import vn.ha.tower_defense.game.GameScreen;
 import vn.ha.tower_defense.game.Position;
 import vn.ha.tower_defense.helpers.FileHelper;
@@ -13,8 +14,8 @@ import vn.ha.tower_defense.tiles.Tile;
 import vn.ha.tower_defense.ui.buttons.GameButton;
 import vn.ha.tower_defense.ui.buttons.TextButton;
 import vn.ha.tower_defense.ui.buttons.TileButton;
-import java.awt.Color;
-import java.awt.Graphics;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ToolBar extends Bar implements Publisher {
@@ -46,7 +48,7 @@ public class ToolBar extends Bar implements Publisher {
         textButtons = new ArrayList<>();
 
         this.textButtons.add(new TextButton(0, 700, 100, 50, "SAVE"));
-
+        this.loadPathButtons();
     }
 
     private void saveMap(Tile[][] map) {
@@ -64,7 +66,6 @@ public class ToolBar extends Bar implements Publisher {
     }
 
     private void loadTileButtons(GameScreen gameScreen) {
-
         int i = 0;
         this.tileOptionBtns = new ArrayList<>();
         for (Tile tile : gameScreen.getTileManager().getTiles()) {
@@ -76,6 +77,13 @@ public class ToolBar extends Bar implements Publisher {
                 i++;
             }
         }
+    }
+
+    private void loadPathButtons(){
+        TextButton startPathButton = new TextButton(70 + x + 32, y + 100, 34, 34, "Start");
+        TextButton endPathButton = new TextButton(70 + x + 8 + 64, y + 100, 34, 34 , "End");
+        this.textButtons.add(startPathButton);
+        this.textButtons.add(endPathButton);
     }
 
     private void setSize(GameScreen gameScreen) {
@@ -99,7 +107,10 @@ public class ToolBar extends Bar implements Publisher {
     // Hanlde mouse event
     @Override
     public void handleMouseMoved(MouseEvent e) {
-        for (GameButton gameButton : tileOptionBtns) {
+        List<GameButton> gameButtons = new ArrayList<>();
+        gameButtons.addAll(this.tileOptionBtns);
+        gameButtons.addAll(this.textButtons);
+        for (GameButton gameButton : gameButtons) {
             gameButton.setIsHovered(false);
             if (gameButton.getBound().contains(e.getPoint())) {
                 gameButton.setIsHovered(true);
@@ -110,7 +121,10 @@ public class ToolBar extends Bar implements Publisher {
 
     @Override
     public void handleMousePressed(MouseEvent e) {
-        for (GameButton gameButton : tileOptionBtns) {
+        List<GameButton> gameButtons = new ArrayList<>();
+        gameButtons.addAll(this.tileOptionBtns);
+        gameButtons.addAll(this.textButtons);
+        for (GameButton gameButton : gameButtons) {
             gameButton.setIsPressed(false);
             if (gameButton.getBound().contains(e.getPoint())) {
                 gameButton.setIsPressed(true);
@@ -156,7 +170,6 @@ public class ToolBar extends Bar implements Publisher {
             gameButton.setIsPressed(false);
             gameButton.setIsHovered(false);
         }
-
     }
 
     // Getter and Setter

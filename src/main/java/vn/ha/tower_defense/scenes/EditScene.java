@@ -105,7 +105,6 @@ public class EditScene extends Scene {
             this.bottomBar.handleMouseMoved(e);
         } else {
             setCurrentMousePoint(e);
-
         }
     }
 

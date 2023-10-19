@@ -30,16 +30,7 @@ public class ActionBar extends Bar {
     }
 
     private void loadTileButtons(GameScreen gameScreen) {
-        int i = 0;
         this.tileOptionBtns = new ArrayList<>();
-        // for (Tile tile : gameScreen.getTileManager().getTiles()) {
-        //     if (tile.getId() % 4 != 1)
-        //         continue;
-        //     tileOptionBtns.add(
-        //             new TileButton(100 + x + i * 32 + i * (tile.getSprite().getWidth() / 10), y + 50, 32, 32,
-        //                     new Tile(tile)));
-        //     i++;
-        // }
     }
 
     private void setSize(GameScreen gameScreen) {
@@ -59,7 +50,6 @@ public class ActionBar extends Bar {
         }
     }
 
-    // Hanlde mouse event
     @Override
     public void handleMouseMoved(MouseEvent e) {
         for (GameButton gameButton : tileOptionBtns) {

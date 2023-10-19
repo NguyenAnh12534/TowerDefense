@@ -44,6 +44,16 @@ public class GameButton {
         drawBorder(g);
     }
 
+    protected void drawAffect(Graphics g) {
+        if (this.getIsHovered()) {
+            this.drawHoverEffect(g);
+        }
+
+        if (this.getIsPressed()) {
+            this.drawPressedEffect(g);
+        }
+    }
+
     public void drawBody(Graphics g) {
         // Fill background color
         g.setColor(Color.WHITE);
@@ -56,6 +66,8 @@ public class GameButton {
 
     public void drawHoverEffect(Graphics g) {
         Color transparentColor = new Color(0, 0, 0, 50); // Adjust alpha value for desired transparency
+        g.setColor(Color.black);
+        g.drawRect(this.x, this.y, this.width, this.height);
         g.setColor(transparentColor);
         g.fillRect(this.x, this.y, this.width, this.height);
     }
@@ -69,7 +81,7 @@ public class GameButton {
     }
 
     protected void drawPressedEffect(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Color.WHITE);
 
         g.drawRect(this.x + 1, this.y + 1, this.width - 2, this.height - 2);
         g.drawRect(this.x + 2, this.y + 2, this.width - 4, this.height - 4);

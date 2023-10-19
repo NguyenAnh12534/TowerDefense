@@ -17,6 +17,7 @@ public class TextButton extends GameButton {
     }
 
     private void drawText(Graphics g) {
+
         int w = g.getFontMetrics().stringWidth(text);
         int ascent = g.getFontMetrics().getAscent();
         int descent = g.getFontMetrics().getDescent();
@@ -25,6 +26,7 @@ public class TextButton extends GameButton {
 
         g.drawString(this.text, super.getX() + super.getWidth() / 2 + - w / 2, super.getY() + super.getHeight() / 2 + stringHeight / 3);
 
+        super.drawAffect(g);
     }
     
     @Override
